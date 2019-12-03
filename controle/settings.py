@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'controle.core',
     'controle.produto',
+    'controle.estoque',
 ]
 
 MIDDLEWARE = [
