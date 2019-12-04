@@ -3,21 +3,27 @@ from django.db import models
 from controle.core.models import TimeStampedModel
 from controle.produto.models import Produto
 
-movimento = (
+
+MOVIMENTO = (
     ('e', 'entrada'),
     ('s', 'saida'),
 )
 
+
 class Estoque(TimeStampedModel):
     funcionario = models.ForeignKey(User, on_delete=models.CASCADE)
     nf = models.PositiveIntegerField('nota fiscal', null=True, blank=True)
-    movimento = models.CharField(max_length=1, choices=movimento)
+    movimento = models.CharField(max_length=1, choices=MOVIMENTO)
 
     class Meta:
-        ordering = ('-created', )
+        ordering = ('-created',)
 
     def __str__(self):
-        return str(self.pk)
+        return '{} - {} - {}'.format(self.pk, self.nf, self.created.strftime('%d-%m-%Y'))
+
+    def nf_formated(self):
+        return str(self.nf).zfill(3)
+
 
 class EstoqueItens(models.Model):
     estoque = models.ForeignKey(Estoque, on_delete=models.CASCADE)
@@ -29,4 +35,4 @@ class EstoqueItens(models.Model):
         ordering = ('pk',)
 
     def __str__(self):
-        return '{}-{}-{}'.format(self.pk, self.estoque.pk, self.produto)
+        return '{} - {} - {}'.format(self.pk, self.estoque.pk, self.produto)
